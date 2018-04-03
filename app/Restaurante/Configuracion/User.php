@@ -4,10 +4,11 @@ namespace Restaurante\Configuracion;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Traits\DatesTranslator;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, DatesTranslator;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'role_id', 'name', 'lastname', 'username', 'email', 'password', 
+        'role_id', 'name', 'lastname', 'username', 'email', 
     ];
 
     /**
@@ -26,4 +27,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * User belongs to Role.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role()
+    {
+        // belongsTo(RelatedModel, foreignKey = role_id, keyOnRelatedModel = id)
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
 }
